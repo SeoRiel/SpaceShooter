@@ -12,13 +12,13 @@ public class SmoothFollow : MonoBehaviour
     private Transform camTransform;     // 카메라의 Transform 변수
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         camTransform = GetComponent<Transform>();        
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         // 카메라의 부드러운 회전을 위한 Mathf.LerpAngle
         float currentAngle = 

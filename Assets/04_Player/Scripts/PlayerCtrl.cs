@@ -29,7 +29,7 @@ public class PlayerCtrl : MonoBehaviour
     [HideInInspector]
     public Animation animation;                         // Animation Component를 저장하기 위한 변수
 
-    void Start()                                        // Start is called before the first frame update
+    private void Start()                                // Start is called before the first frame update
     {
         playerTransform = GetComponent<Transform>();    // 스크립트가 실행된 후,
                                                         // 처음 수행되는 Start 함수에서 Transform 컴포넌트 할당
@@ -39,7 +39,7 @@ public class PlayerCtrl : MonoBehaviour
         animation.Play();
     }
 
-    void Update()                                       // Update is called once per frame
+    private void Update()                               // Update is called once per frame
     {
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
@@ -56,8 +56,6 @@ public class PlayerCtrl : MonoBehaviour
 
         // Vector3.up 축을 기준으로 rotateSpeed만큼의 속도로 회전
         playerTransform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime * rotate);
-
-
 
         // 키보드 입력값을 기준으로 동작할 애니메이션 수행
         if(vertical >= 0.1f)
