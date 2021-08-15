@@ -4,40 +4,42 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
-    public enum State                      // 열거형 변수를 이용한 적 캐릭터의 상태를 정의
+    // 적 캐릭터의 상태를 표현하기 위한 열거형 변수 정의
+    public enum State
     {
         PATROL,
         TRACE,
         ATTACK,
         DIE
     }
-    public State state = State.PATROL;     // 상태를 저장할 변수
+    public State state = State.PATROL;  // 상태를 저장할 변수
 
-    public float attackDistance = 5.0f;    // 공격 사거리
-    public float traceDistance = 10.0f;    // 추적 사거리
-    public bool bDie = false;              // 사망 여부 판단
+    private Transform playerTransform;  // 플레이어 캐릭터의 위치를 저장할 변수
+    private Transform enemyTransform;   // 적 캐릭터의 위치를 저장할 변수
+    private Animator animator;          // Animator Component를 저장할 변수
 
-    private Transform playerTransform;     // 플레이어 캐릭터의 위치를 저장할 변수
-    private Transform enemyTransform;      // 적 캐릭터의 위치를 저장할 변수
-    private WaitForSeconds waitForSeconds; // 코루틴에서 사용할 지연 시간 변수
-    private MoveAgent moveAgent;           // 이동을 제어하는 MoveAgnet class를 저장할 변수
-    private Animator animator;             // Animator Component를 저장할 변수
+    public float attackDistance = 5.0f; // 공격 사거리
+    public float traceDistance = 10.0f; // 추적 사거리
 
-    // 애니메이터 컨트롤러에 정의한 파라미터의 해시값을 추출
+    public bool isDie = false;          // 사망 여부를 판단하는 함수
+    private WaitForSeconds wForS;       // 코루틴에서 사용할 지연 변수
+
+    private MoveAgent moveAgent;        // 이동을 제어하는 MoveAgnet class를 저장할 변수
+
+    // 애니메이터 컨트롤러에 정의한 파라미터의 해시값을 미리 추출
     private readonly int hashMove = Animator.StringToHash("IsMove");
     private readonly int hashSpeed = Animator.StringToHash("Speed");
 
-    private float damping = 1.0f;          // 회전할 때의 속도를 조절하는 계수
-
     private void Awake()
     {
-        // 플레이어 캐릭터 게임 오브젝트 추출
-        var player = GameObject.FindGameObjectsWithTag("PLAYER");
+        // 주인공 게임 오브젝트 추출
+        GameObject player = GameObject.FindGameObjectWithTag("PLAYER");
 
-        // 플레이어 캐릭터의 Transform Component 추출
+        // 플레이어 캐릭터를 발견할 경우
         if (player != null)
         {
-            playerTransform = GetComponent<Transform>();
+            // 플레이어 캐릭터의 Transform Component 추출
+            playerTransform = player.GetComponent<Transform>();
         }
 
         // 적 캐릭터의 Transform Component 추출
@@ -45,38 +47,36 @@ public class EnemyAI : MonoBehaviour
 
         // Animator Component 추출
         animator = GetComponent<Animator>();
-
-        // 이동을 제어하는 MoveAgnet class를 추출
+        
+        // 이동을 제어하는 MoveAgnet class를 저장하는 변수
         moveAgent = GetComponent<MoveAgent>();
-
-        // 코루틴 함수의 지연 시간 설정
-        waitForSeconds = new WaitForSeconds(0.3f);
+        
+        // 코루틴의 지연 시간 생성
+        wForS = new WaitForSeconds(0.3f);
     }
 
-    // Update is called once per frame
     private void OnEnable()
     {
         // CheckState Coroutine 함수 실행
         StartCoroutine(CheckState());
-
-        // Action Coroutine 함수 실행
         StartCoroutine(Action());
     }
 
-    // 적 캐릭터의 상태를 체크하는 Coroutine 함수
+    // 적 캐릭터의 상태를 검사하는 Coroutine Function
     private IEnumerator CheckState()
     {
-        // 적 캐릭터가 사망하기 전까지 실행하는 무한 루프
-        while(!bDie)
+        // 적 캐릭터가 사망하기 전까지 도는 무한루프
+        while(!isDie)
         {
-            // 사망 상태일 때, Coroutine 함수 종료
+            // 상태가 사망이면 코루틴 함수 종료
             if(state == State.DIE)
             {
                 yield break;
             }
 
-            // 플레이어와 적 캐릭터 간의 거리 계산
+            // 주인공과 적 캐릭터 간의 거리 계산
             float distance = Vector3.Distance(playerTransform.position, enemyTransform.position);
+            // float distance = (playerTransform.position - enemyTransform.position).sqrMagnitude;
 
             // 공격 사정거리 이내인 경우
             if(distance <= attackDistance)
@@ -84,7 +84,7 @@ public class EnemyAI : MonoBehaviour
                 state = State.ATTACK;
             }
             // 추적 사정거리 이내인 경우
-            else if(distance <= traceDistance)
+            else if( distance <= traceDistance)
             {
                 state = State.TRACE;
             }
@@ -93,42 +93,42 @@ public class EnemyAI : MonoBehaviour
                 state = State.PATROL;
             }
 
-            // 0.3초 동안 대기 상태가 되며, 제어권 양보
-            yield return waitForSeconds;
+            // 0.3초 동안 대기 상태에서 제어권 양도
+            yield return wForS;
         }
     }
 
-    // 상태에 따라 적 캐릭터의 행동을 처리하는 Coroutine 함수
+    // 상태에 따라 적 캐릭터의 행동을 처리하는 Coroutine Function
     private IEnumerator Action()
     {
-        // 적 캐릭터가 사망할 때까지 무한 반복
-        while(!bDie)
+        // 적 캐릭터가 사망할 때까지 무한루프
+        while (!isDie)
         {
-            yield return waitForSeconds;
+            yield return wForS;
 
-            // 상태에 따른 분기 처리
+            // 상태에 따라 분기 처리
             switch(state)
             {
                 case State.PATROL:
-                    // 순찰 모드 활성화
+                    // 순찰 모드를 활성화
                     moveAgent.patrolling = true;
                     animator.SetBool(hashMove, true);
                     break;
 
                 case State.TRACE:
-                    // 주인공의 위치를 넘겨 추적 모드 활성화
+                    // 주인공의 위치를 넘겨 추적 모드로 진행
                     moveAgent.traceTarget = playerTransform.position;
                     animator.SetBool(hashMove, true);
                     break;
 
                 case State.ATTACK:
-                    // 순찰 및 추적 중단
+                    // 순찰 및 추적 중지
                     moveAgent.Stop();
                     animator.SetBool(hashMove, false);
                     break;
 
                 case State.DIE:
-                    // 순찰 및 추적 중단
+                    // 순찰 및 추적 중지
                     moveAgent.Stop();
                     break;
             }
@@ -137,7 +137,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
-        // Speed Parameter에 이동 속도를 전달
+        // Speed Parameter에 이동 속도 전달
         animator.SetFloat(hashSpeed, moveAgent.speed);
     }
 }
