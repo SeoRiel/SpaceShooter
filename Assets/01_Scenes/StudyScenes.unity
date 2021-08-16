@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 4890085278179872738, guid: 0cb7c6ae82c3d974e927238dddb8343e,
+  m_LightingSettings: {fileID: 4890085278179872738, guid: a2fae2d37c276af458885277d27dd40c,
     type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -2125,6 +2125,11 @@ PrefabInstance:
       propertyPath: m_audioClip
       value: 
       objectReference: {fileID: 8300000, guid: 3988c7241ff434c2a900f22726ee7a08, type: 3}
+    - target: {fileID: 6477397596187563228, guid: 7dec01fb5cf667b48b640d85070da120,
+        type: 3}
+      propertyPath: traceDistance
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 8247608990173242192, guid: 7dec01fb5cf667b48b640d85070da120,
         type: 3}
       propertyPath: wayPoints.Array.data[0]
