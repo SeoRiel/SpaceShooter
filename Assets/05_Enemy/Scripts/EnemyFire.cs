@@ -54,7 +54,7 @@ public class EnemyFire : MonoBehaviour
             }
 
             // 주인공이 있는 위치까지 회전 각도 계산
-            Quaternion rotate = Quaternion.LookRotation(playerTransform.position, enemyTransform.position);
+            Quaternion rotate = Quaternion.LookRotation(playerTransform.position - enemyTransform.position);
             // 보간 함수를 이용한 점진적 회전
             enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, rotate, Time.deltaTime * damping);
         }
@@ -71,7 +71,7 @@ public class EnemyFire : MonoBehaviour
         // 총알 생성
         GameObject bullet = Instantiate(bulletObject, firePosition.position, firePosition.rotation);
         // 일정 시간이 지난 후, 삭제
-        Destroy(bulletObject, 3.0f);
+        Destroy(bullet, 3.0f);
 
         // 남은 총알로 재장전 여부 계산
         isReload = (--currentBullet % maxBullet == 0);

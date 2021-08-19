@@ -23,14 +23,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6032146851616541977}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.156, y: 0.069, z: 0.907}
+  m_LocalRotation: {x: 0.033258323, y: 0.012680495, z: 0.35603014, w: 0.93379635}
+  m_LocalPosition: {x: -0.156, y: 0.069, z: 0.893}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2264299395190593790}
   m_Father: {fileID: 8247608990356163922}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 3.043, y: 2.719, z: 41.813}
 --- !u!1 &6420450453369099513
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,6 +488,7 @@ GameObject:
   - component: {fileID: 5910102251406855393}
   - component: {fileID: 8247608990173242192}
   - component: {fileID: 6477397596187563228}
+  - component: {fileID: 2946391659081239762}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -565,7 +566,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 3988c7241ff434c2a900f22726ee7a08, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -726,6 +727,25 @@ MonoBehaviour:
   attackDistance: 5
   traceDistance: 10
   isDie: 0
+--- !u!114 &2946391659081239762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8247608990652689909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c511fea70e209984ba91ad01c839c826, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isFire: 0
+  fireSFX: {fileID: 8300000, guid: 3988c7241ff434c2a900f22726ee7a08, type: 3}
+  reloadSFX: {fileID: 8300000, guid: fadf80bb36a4b4b11956cd0e19f9a859, type: 3}
+  bulletObject: {fileID: 8165871581391280410, guid: 9a1d9830f913d8e4ba344e5fb79f4917,
+    type: 3}
+  firePosition: {fileID: 3045932827101328532}
+  muzzleFlash: {fileID: 672205568504757979}
 --- !u!1001 &8247608990355773394
 PrefabInstance:
   m_ObjectHideFlags: 0
