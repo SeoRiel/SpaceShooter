@@ -25,6 +25,7 @@ public class EnemyAI : MonoBehaviour
     private WaitForSeconds wForS;       // 코루틴에서 사용할 지연 변수
 
     private MoveAgent moveAgent;        // 이동을 제어하는 MoveAgnet class를 저장할 변수
+    private EnemyFire enemyFire;        // 총알 발사를 제어하는 EnemyFire class를 저장할 변수
 
     // 애니메이터 컨트롤러에 정의한 파라미터의 해시값을 미리 추출
     private readonly int hashMove = Animator.StringToHash("IsMove");
@@ -50,7 +51,10 @@ public class EnemyAI : MonoBehaviour
         
         // 이동을 제어하는 MoveAgnet class를 저장하는 변수
         moveAgent = GetComponent<MoveAgent>();
-        
+
+        // 총알 발사를 제어하는 EnemyFire class 추출
+        enemyFire = GetComponent<EnemyFire>();
+
         // 코루틴의 지연 시간 생성
         wForS = new WaitForSeconds(0.3f);
     }
@@ -110,12 +114,16 @@ public class EnemyAI : MonoBehaviour
             switch(state)
             {
                 case State.PATROL:
+                    // 총알 발사 정지
+                    enemyFire.isFire = false;
                     // 순찰 모드를 활성화
                     moveAgent.patrolling = true;
                     animator.SetBool(hashMove, true);
                     break;
 
                 case State.TRACE:
+                    // 총알 발사 정지
+                    enemyFire.isFire = false;
                     // 주인공의 위치를 넘겨 추적 모드로 진행
                     moveAgent.traceTarget = playerTransform.position;
                     animator.SetBool(hashMove, true);
@@ -125,6 +133,12 @@ public class EnemyAI : MonoBehaviour
                     // 순찰 및 추적 중지
                     moveAgent.Stop();
                     animator.SetBool(hashMove, false);
+
+                    // 총알 발사 시작
+                    if(enemyFire.isFire == false)
+                    {
+                        enemyFire.isFire = true;
+                    }
                     break;
 
                 case State.DIE:
