@@ -486,9 +486,11 @@ GameObject:
   - component: {fileID: 8247608990173242193}
   - component: {fileID: 2793300423483599141}
   - component: {fileID: 5910102251406855393}
+  - component: {fileID: 1060612654038246117}
   - component: {fileID: 8247608990173242192}
   - component: {fileID: 6477397596187563228}
   - component: {fileID: 2946391659081239762}
+  - component: {fileID: 76381005368794319}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -676,6 +678,20 @@ LODGroup:
     fadeTransitionWidth: 0
     renderers: []
   m_Enabled: 1
+--- !u!136 &1060612654038246117
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8247608990652689909}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.3
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &8247608990173242192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -746,6 +762,18 @@ MonoBehaviour:
     type: 3}
   firePosition: {fileID: 3045932827101328532}
   muzzleFlash: {fileID: 672205568504757979}
+--- !u!114 &76381005368794319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8247608990652689909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d2c8c5af762f35458de06ca56a5bae4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8247608990355773394
 PrefabInstance:
   m_ObjectHideFlags: 0

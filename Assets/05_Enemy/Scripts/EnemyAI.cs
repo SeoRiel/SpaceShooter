@@ -30,6 +30,8 @@ public class EnemyAI : MonoBehaviour
     // 애니메이터 컨트롤러에 정의한 파라미터의 해시값을 미리 추출
     private readonly int hashMove = Animator.StringToHash("IsMove");
     private readonly int hashSpeed = Animator.StringToHash("Speed");
+    private readonly int hashDie = Animator.StringToHash("Die");
+    private readonly int hashDieIndex = Animator.StringToHash("DieIndex");
 
     private void Awake()
     {
@@ -142,8 +144,16 @@ public class EnemyAI : MonoBehaviour
                     break;
 
                 case State.DIE:
+                    isDie = true;
+                    enemyFire.isFire = false;
                     // 순찰 및 추적 중지
                     moveAgent.Stop();
+                    // 사망 애니메이션의 종류를 지정
+                    animator.SetInteger(hashDieIndex, Random.Range(0, 3)); 
+                    // 사망 애니메이션 실행
+                    animator.SetTrigger(hashDie);
+                    // Capsule Collider Component를 비활성화
+                    GetComponent<CapsuleCollider>().enabled = false;
                     break;
             }
         }
