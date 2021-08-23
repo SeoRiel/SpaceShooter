@@ -122,6 +122,4 @@ public class EnemyFire : MonoBehaviour
         currentBullet = maxBullet;
         isReload = false;
     }
-
-
 }

@@ -45,6 +45,6 @@ public class EnemyDamage : MonoBehaviour
 
         // Ç÷Èç È¿°ú »ý¼º
         GameObject blood = Instantiate<GameObject>(bloodEffect, hitPosition, rotate);
+        Destroy(blood, 1.0f);
     }
-
 }

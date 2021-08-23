@@ -12,6 +12,7 @@ public class EnemyAI : MonoBehaviour
         ATTACK,
         DIE
     }
+
     public State state = State.PATROL;  // 상태를 저장할 변수
 
     private Transform playerTransform;  // 플레이어 캐릭터의 위치를 저장할 변수

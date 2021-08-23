@@ -33,6 +33,9 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: Die
+    m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: DieIndex
     m_EventTreshold: 2
@@ -691,6 +694,9 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: Die
+    m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: DieIndex
     m_EventTreshold: 1
