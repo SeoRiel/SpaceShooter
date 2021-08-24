@@ -86,6 +86,9 @@ public class MoveAgent : MonoBehaviour
 
             // 배열의 첫번째 항목 삭제
             wayPoints.RemoveAt(0);
+
+            // 첫번째로 이동할 위치를 불규칙하게 추출
+            nextIndex = Random.Range(0, wayPoints.Count);
         }
 
         MoveWaypoint();
@@ -130,7 +133,9 @@ public class MoveAgent : MonoBehaviour
             && agent.remainingDistance <= 5.0f)
         {
             // 다음 목적지의 배열 첨자를 계산
-            nextIndex = ++nextIndex % wayPoints.Count;
+            //nextIndex = ++nextIndex % wayPoints.Count;
+            nextIndex = Random.Range(0, wayPoints.Count);
+
             // 다음 목적지로 이동 명령 수행
             MoveWaypoint();
         }

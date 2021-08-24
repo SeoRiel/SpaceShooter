@@ -415,9 +415,11 @@ GameObject:
   m_Component:
   - component: {fileID: 2806248511770281431}
   - component: {fileID: 2806248512191063178}
+  - component: {fileID: 8903999441022707033}
   - component: {fileID: 2806248512191063183}
   - component: {fileID: 2806248512191063176}
   - component: {fileID: 2806248512191063181}
+  - component: {fileID: 8389476521815327859}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -468,6 +470,20 @@ LODGroup:
     fadeTransitionWidth: 0
     renderers: []
   m_Enabled: 1
+--- !u!136 &8903999441022707033
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2806248511770646967}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.3
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!111 &2806248512191063183
 Animation:
   m_ObjectHideFlags: 0
@@ -531,6 +547,19 @@ MonoBehaviour:
     reload:
     - {fileID: 8300000, guid: fadf80bb36a4b4b11956cd0e19f9a859, type: 3}
     - {fileID: 8300000, guid: 479d94af985554c7e9f8a50c3eeea6d1, type: 3}
+--- !u!114 &8389476521815327859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2806248511770646967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ba332bef952cd04bb2a10f2f26e7177, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHp: 0
 --- !u!1 &2806248511770646969
 GameObject:
   m_ObjectHideFlags: 0

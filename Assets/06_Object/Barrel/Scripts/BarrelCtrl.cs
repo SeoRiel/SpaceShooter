@@ -9,6 +9,7 @@ public class BarrelCtrl : MonoBehaviour
     public Texture[] textures;              // 드럼통의 텍스처를 저장할 배열
     public float explosionRadius = 10.0f;   // 폭발 반경
     public AudioClip explostionSFX;         // 폭발음 오디오 클립
+    public ShakeCamera shake;               // Shake Class를 저장할 변수
 
     private int hitCount = 0;               // Bullet에 맞은 횟수
     private Rigidbody rigidBody;            // Rigidbody Component를 저장할 변수
@@ -30,6 +31,9 @@ public class BarrelCtrl : MonoBehaviour
 
         // 난수를 이용한 무작위 텍스처 적용
         meshRender.material.mainTexture = textures[Random.Range(0, textures.Length)];
+
+        // Shake Scrpit 추출
+        shake = GameObject.Find("CameraRig").GetComponent<ShakeCamera>();
 
         // AudioSource Component를 저장할 변수
         audio = GetComponent<AudioSource>();
@@ -73,6 +77,9 @@ public class BarrelCtrl : MonoBehaviour
 
         // 폭발음 출력
         audio.PlayOneShot(explostionSFX, 1.0f);
+
+        // Shake Effect 호출
+        StartCoroutine(shake.CameraShake(0.1f, 0.2f, 0.5f));
     }
 
     // 폭발력을 주변에 전달하는 함수
