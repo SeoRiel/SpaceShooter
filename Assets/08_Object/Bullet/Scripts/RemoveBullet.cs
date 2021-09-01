@@ -12,7 +12,8 @@ public class RemoveBullet : MonoBehaviour
         if(collision.collider.tag == "BULLET")      // 충돌한 게임 오브젝트의 태그값 비교
         {
             ShowEffect(collision);                  // Call is spark effect function
-            Destroy(collision.gameObject);          // 충돌한 게임 오브젝트 삭제
+            // Destroy(collision.gameObject);          // 충돌한 게임 오브젝트 삭제
+            collision.gameObject.SetActive(false);
         }
     }
 

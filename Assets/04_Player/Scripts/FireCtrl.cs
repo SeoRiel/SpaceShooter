@@ -75,7 +75,15 @@ public class FireCtrl : MonoBehaviour
         StartCoroutine(shake.CameraShake());
 
         // Bullet Prefab을 동적으로 생성
-        Instantiate(bullet, firePosition.position, firePosition.rotation);
+        // Instantiate(bullet, firePosition.position, firePosition.rotation);
+
+        var _bullet = GameManager.instance.GetBullet();
+        if (_bullet != null)
+        {
+            _bullet.transform.position = firePosition.position;
+            _bullet.transform.rotation = firePosition.rotation;
+            _bullet.SetActive(true);
+        }
 
         // 파티클 실행
         // cartridge.Play();

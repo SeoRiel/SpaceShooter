@@ -774,6 +774,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d2c8c5af762f35458de06ca56a5bae4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hpBarPrefab: {fileID: 2837618327854048589, guid: 7245a9a0b46416f418ef346457f2b21b,
+    type: 3}
+  hpBarOffset: {x: 0, y: 2.2, z: 0}
 --- !u!1001 &8247608990355773394
 PrefabInstance:
   m_ObjectHideFlags: 0

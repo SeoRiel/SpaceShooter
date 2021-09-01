@@ -43,10 +43,10 @@ public class EnemyFire : MonoBehaviour
 
     private void Update()
     {
-        if(!isReload && isFire)
+        if (!isReload && isFire)
         {
             // 현재 시간이 다음 발사 시간보다 큰지 확인
-            if(Time.time >= nextFire)
+            if (Time.time >= nextFire)
             {
                 Fire();
                 // 다음 발사 시간 계산
@@ -65,6 +65,13 @@ public class EnemyFire : MonoBehaviour
         animator.SetTrigger(hashFire);
         audio.PlayOneShot(fireSFX, 1.0f);
 
+        // 남은 총알로 재장전 여부 계산
+        isReload = (--currentBullet % maxBullet == 0);
+        if (isReload)
+        {
+            StartCoroutine(Reloading());
+        }
+
         // 총구 화염 효과 코루틴 호출
         StartCoroutine(ShowMuzzleFlash());
 
@@ -72,13 +79,6 @@ public class EnemyFire : MonoBehaviour
         GameObject bullet = Instantiate(bulletObject, firePosition.position, firePosition.rotation);
         // 일정 시간이 지난 후, 삭제
         Destroy(bullet, 3.0f);
-
-        // 남은 총알로 재장전 여부 계산
-        isReload = (--currentBullet % maxBullet == 0);
-        if(isReload)
-        {
-            StartCoroutine(Reloading());
-        }
     }
 
     IEnumerator ShowMuzzleFlash()
@@ -96,7 +96,8 @@ public class EnemyFire : MonoBehaviour
         // 텍스처의 Offset 속성에 적용할 불규칙한 값을 생성
         Vector2 offset = new Vector2(Random.Range(0, 2), Random.Range(0, 2)) * 0.5f;
         // MuzzleFlash의 Material의 Offset 값을 적용
-        muzzleFlash.material.SetTextureOffset("_MainTex", offset);                      // _MainTex == Diffuse, _BumpMap == Normal Map, _Cube == CubeMap
+        // _MainTex == Diffuse, _BumpMap == Normal Map, _Cube == CubeMap
+        muzzleFlash.material.SetTextureOffset("_MainTex", offset);
 
         // MuzzleFlash가 보일 때동안 잠시 대기
         yield return new WaitForSeconds(Random.Range(0.05f, 0.2f));

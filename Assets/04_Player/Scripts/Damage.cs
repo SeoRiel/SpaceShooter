@@ -71,6 +71,7 @@ public class Damage : MonoBehaviour
     private void PlayerDie()
     {
         OnPlayerDie();
+        GameManager.instance.isGameOver = true;
         //  Debug.Log("Player Die!");
         // "ENEMY" Tag로 지정된 모든 적 캐릭터를 추출하여 배열에 저장
         // GameObject[] enemies = GameObject.FindGameObjectsWithTag(enemyTag);
