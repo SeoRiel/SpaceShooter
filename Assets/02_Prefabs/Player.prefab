@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  type: 0
   radius: 0.1
 --- !u!1 &2806248511520386357
 GameObject:
@@ -646,6 +647,11 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 479d94af985554c7e9f8a50c3eeea6d1, type: 3}
   magazineImage: {fileID: 0}
   magazineText: {fileID: 0}
+  weaponIcons:
+  - {fileID: 21300000, guid: a01102f3a66ae7445bf69b2d05160b5a, type: 3}
+  - {fileID: 21300000, guid: 982ba1fa7236e40f6b60037856082f75, type: 3}
+  - {fileID: 21300000, guid: 6a240e6bb180bbe43b9f7b92d3eb2328, type: 3}
+  weaponImage: {fileID: 0}
   maxBullet: 10
   remainingBullet: 10
   reloadTime: 2

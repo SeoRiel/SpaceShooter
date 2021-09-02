@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     public int maxPool = 10;
     public List<GameObject> bulletPool = new List<GameObject>();
 
+    private bool isPaused;
+
     private void Awake()
     {
         if(instance == null)
@@ -108,5 +110,29 @@ public class GameManager : MonoBehaviour
             // 리스트에 생성한 총알 추가
             bulletPool.Add(bulletObject);
         }
+    }
+
+    public void OnPauseClick()
+    {
+        // 일시 정지 값을 토글 시킴
+        isPaused = !isPaused;
+
+        // Time Scale이 0이면 정지, 1이면 정상 속도
+        Time.timeScale = (isPaused) ? 0.0f : 1.0f;
+
+        // 주인공 객체 추출
+        var playerObject = GameObject.FindGameObjectWithTag("PLAYER");
+
+        // 주인공 캐릭터에 추가된 모든 스크립트 추출
+        var scripts = playerObject.GetComponents<MonoBehaviour>();
+
+        // 주인공 캐릭터의 모든 스크립트를 활성화/비활성화
+        foreach(var script in scripts)
+        {
+            script.enabled = !isPaused;
+        }
+
+        var canvasGroup = GameObject.Find("Panel - Weapon").GetComponent<CanvasGroup>();
+        canvasGroup.blocksRaycasts = !isPaused;
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 // 총알 발사와 재장전 오디오 클립을 저장할 구조체
 [System.Serializable]
@@ -27,6 +28,8 @@ public class FireCtrl : MonoBehaviour
 
     public Image magazineImage;                            // 탄창 이미지
     public Text magazineText;                              // 남은 총알 개수
+    public Sprite[] weaponIcons;                           // 변경할 무기 이미지
+    public Image weaponImage;                              // 교체할 무기 이미지 UI
 
     public int maxBullet = 10;                             // 최대 총알 수
     public int remainingBullet = 10;                       // 남은 총알 수
@@ -54,6 +57,11 @@ public class FireCtrl : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         // 마우스 왼쪽 버튼을 클릭했을 때, Fire 함수 호출
         if (!isReloading && Input.GetMouseButtonDown(0))
         {
@@ -127,5 +135,11 @@ public class FireCtrl : MonoBehaviour
 
         // 사운드 출력
         audio.PlayOneShot(sfx, 1.0f);
+    }
+
+    public void OnChangeWeapon()
+    {
+        currentWeapon = (WeaponType)((int)++currentWeapon % 2);
+        weaponImage.sprite = weaponIcons[(int)currentWeapon];
     }
 }
