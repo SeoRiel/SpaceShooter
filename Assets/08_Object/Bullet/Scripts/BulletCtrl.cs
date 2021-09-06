@@ -17,6 +17,9 @@ public class BulletCtrl : MonoBehaviour
         tr = GetComponent<Transform>();
         rb = GetComponent<Rigidbody>();
         trail = GetComponent<TrailRenderer>();
+
+        // 불러온 데이터 값을 damage에 적용
+        damage = GameManager.instance.gameData.damage;
     }
 
     // Start is called before the first frame update

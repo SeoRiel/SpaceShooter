@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+// GameData, Item class가 들어간 namespace 명시
+using DataInfomation;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,16 +13,27 @@ public class GameManager : MonoBehaviour
     public float createTime = 2.0f;     // 적 캐릭터를 생성할 주기
     public int maxEnemy = 10;           // 적 캐릭터의 최대 생성 개수
     public bool isGameOver = false;     // 게임 종료 여부를 판단할 변수
+    public CanvasGroup inventoryCG;     // Inventory의 CanvasGroup Component를 저장할 변수
 
     // 싱글턴에 접근하기 위한 instance 변수 선언
     public static GameManager instance = null;
 
+    // 주인공이 죽인 적 캐릭터의 수
+    // [HideInInspector] public int killCount;
+    [Header("GameData")]
+    // 적 캐릭터를 죽인 횟수를 표시할 텍스트 UI
+    public Text killCountText;
+    // DataManager를 저장할 변수
+    private DataManager dataManager;
+    public GameData gameData;
+
     [Header("Obejct Pool")]
     // 생성할 총알 프리팹
-    public GameObject bulletPrefabs;
+    public GameObject bulletPrefabs;    
     // 오브젝트 풀에 생성할 개수
     public int maxPool = 10;
     public List<GameObject> bulletPool = new List<GameObject>();
+
 
     private bool isPaused;
 
@@ -38,13 +52,45 @@ public class GameManager : MonoBehaviour
         // 다른 씬으로 넘어가더라도 삭제하지 않고 유지
         DontDestroyOnLoad(this.gameObject);
 
+        // DataManager를 추출하여 저장
+        dataManager = GetComponent<DataManager>();
+        // dataManager 초기화
+        dataManager.Initiailze();
+
         // 오브젝트 풀링 생성 함수 호출
         CreatePooling();
+    }
+
+    // 게임의 초기 데이터 로드
+    private void LoadGameData()
+    {
+        // GameData를 통해 파일에 저장된 데이터 불러오기
+        GameData data = dataManager.Load();
+
+        gameData.hp = data.hp;
+        gameData.damage = data.damage;
+        gameData.speed = data.speed;
+        gameData.killCount = data.killCount;
+        gameData.equipItem = data.equipItem;
+
+        // KILL_COUNT 키로 저장된 값을 로드
+        // killCount = PlayerPrefs.GetInt("KILL_COUNT", 0);
+        // killCountText.text = "KILL " + killCount.ToString("0000");
+        killCountText.text = "KILL " + gameData.killCount.ToString("0000");
+    }
+
+    // 게임 데이터를 저장
+    private void SaveGameData()
+    {
+        dataManager.Save(gameData);
     }
 
     // Start is called before the first frame update
     private void Start()
     {
+        // 처음 인벤토리를 비활성화
+        OnInventoryOpen(false);
+
         // 하이러키 뷰의 SpawnPointGroup을 찾아 하위에 있는 모든 Transform Component를 가지고 옴
         points = GameObject.Find("SpawnPointGroup").GetComponentsInChildren<Transform>();
 
@@ -134,5 +180,32 @@ public class GameManager : MonoBehaviour
 
         var canvasGroup = GameObject.Find("Panel - Weapon").GetComponent<CanvasGroup>();
         canvasGroup.blocksRaycasts = !isPaused;
+    }
+
+    // 인벤토리를 활성화/비활성화 하는 함수
+    public void OnInventoryOpen(bool isOpened)
+    {
+        inventoryCG.alpha = (isOpened) ? 1.0f : 0.0f;
+        inventoryCG.interactable = isOpened;
+        inventoryCG.blocksRaycasts = isOpened;
+    }
+
+    // 적 캐릭터가 죽을 때마다 호출될 함수
+    public void IncKillCount()
+    {
+        // ++killCount;
+        // killCountText.text = "KILL " + killCount.ToString("0000");
+
+        ++gameData.killCount;
+        killCountText.text = "KILL " + gameData.killCount.ToString("0000");
+
+        // 죽인 횟수 저장
+        // PlayerPrefs.SetInt("KILL_COUNT", killCount);
+    }
+
+    private void OnApplicationQuit()
+    {
+        // 게임 종료 전, 게임 데이터를 저장
+        SaveGameData();
     }
 }

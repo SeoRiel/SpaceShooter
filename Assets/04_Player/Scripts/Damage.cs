@@ -27,6 +27,8 @@ public class Damage : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        // 불러온 데이터 값을 hp에 적용
+        inializeHp = GameManager.instance.gameData.hp;
         currentHp = inializeHp;
 
         // HP bar의 초기 색상 설정
