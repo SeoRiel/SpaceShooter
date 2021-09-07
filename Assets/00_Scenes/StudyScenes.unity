@@ -6194,6 +6194,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1390361557}
   - component: {fileID: 1390361556}
+  - component: {fileID: 1390361558}
   m_Layer: 0
   m_Name: GameManagerObejct
   m_TagString: Untagged
@@ -6214,7 +6215,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   points:
-  - {fileID: 0}
+  - {fileID: 1759324003}
+  - {fileID: 1628210393}
+  - {fileID: 1501845074}
+  - {fileID: 549080662}
+  - {fileID: 1675000789}
+  - {fileID: 2122202387}
+  - {fileID: 1730357754}
   enemy: {fileID: 8247608990652689909, guid: 7dec01fb5cf667b48b640d85070da120, type: 3}
   createTime: 2
   maxEnemy: 10
@@ -6222,7 +6229,7 @@ MonoBehaviour:
   inventoryCG: {fileID: 1799407730}
   killCountText: {fileID: 65031296}
   gameData:
-    killCount: 0
+    killCount: 3
     hp: 120
     damage: 25
     speed: 6
@@ -6230,8 +6237,7 @@ MonoBehaviour:
   bulletPrefabs: {fileID: 8165871581391280410, guid: d6a1871504fe33545b687a2b903fe922,
     type: 3}
   maxPool: 10
-  bulletPool:
-  - {fileID: 0}
+  bulletPool: []
 --- !u!4 &1390361557
 Transform:
   m_ObjectHideFlags: 0
@@ -6246,6 +6252,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1390361558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1390361555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6509dd65cce5fda4286dae9f48e677b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataPath: 
 --- !u!1 &1404347494
 GameObject:
   m_ObjectHideFlags: 0

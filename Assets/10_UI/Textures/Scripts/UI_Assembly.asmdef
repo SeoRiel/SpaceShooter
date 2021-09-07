@@ -1,3 +1,16 @@
 {
-	"name": "UI_Assembly"
+    "name": "UI_Assembly",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7624e55bf22af7f4da32235d15b8350c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

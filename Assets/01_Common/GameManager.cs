@@ -18,24 +18,23 @@ public class GameManager : MonoBehaviour
     // 싱글턴에 접근하기 위한 instance 변수 선언
     public static GameManager instance = null;
 
+    // 인벤토리의 아이템이 변경되었을 때 발생시킬 이벤트의 정의
+    public delegate void ItemChangeDelegate();
+    public static event ItemChangeDelegate OnItemChange;
+
     // 주인공이 죽인 적 캐릭터의 수
     // [HideInInspector] public int killCount;
     [Header("GameData")]
-    // 적 캐릭터를 죽인 횟수를 표시할 텍스트 UI
-    public Text killCountText;
-    // DataManager를 저장할 변수
-    private DataManager dataManager;
+    public Text killCountText;          // 적 캐릭터를 죽인 횟수를 표시할 텍스트 UI
     public GameData gameData;
 
     [Header("Obejct Pool")]
-    // 생성할 총알 프리팹
-    public GameObject bulletPrefabs;    
-    // 오브젝트 풀에 생성할 개수
-    public int maxPool = 10;
+    public GameObject bulletPrefabs;    // 생성할 총알 프리팹
+    public int maxPool = 10;            // 오브젝트 풀에 생성할 개수
     public List<GameObject> bulletPool = new List<GameObject>();
 
-
     private bool isPaused;
+    private DataManager dataManager;    // DataManager를 저장할 변수
 
     private void Awake()
     {
@@ -54,8 +53,12 @@ public class GameManager : MonoBehaviour
 
         // DataManager를 추출하여 저장
         dataManager = GetComponent<DataManager>();
+
         // dataManager 초기화
-        dataManager.Initiailze();
+        dataManager.Initialize();
+
+        // 게임의 초기 데이터 로드
+        LoadGameData();
 
         // 오브젝트 풀링 생성 함수 호출
         CreatePooling();
@@ -83,6 +86,127 @@ public class GameManager : MonoBehaviour
     private void SaveGameData()
     {
         dataManager.Save(gameData);
+    }
+
+    // 인벤토리 아이템을 추가했을 때, 데이터의 정보를 갱신하는 함수
+    public void AddItem(Item item)
+    {
+        // 보유 아이템에 같은 아이템이 있으면 추가하지 않고 빠져나감
+        if(gameData.equipItem.Contains(item))
+        {
+            return;
+        }
+
+        // 아이템을 GameData.equipItem 배열에 추가
+        gameData.equipItem.Add(item);
+
+        // 아이템의 종류에 따라 분기 처리
+        switch(item.itemType)
+        {
+            case Item.ItemType.HP:
+            {
+                if(item.itemCalc == Item.ItemCalc.INC_VALUE)
+                {
+                    gameData.hp += item.value;
+                }
+                else
+                {
+                    gameData.hp += gameData.hp * item.value;
+                }
+                break;
+            }
+
+            case Item.ItemType.DAMAGE:
+            {
+                if(item.itemCalc == Item.ItemCalc.INC_VALUE)
+                {
+                    gameData.damage += item.value;
+                }
+                else
+                {
+                    gameData.damage += gameData.damage * item.value;
+                }
+                break;
+            }
+
+            case Item.ItemType.SPEED:
+            {
+                if(item.itemCalc == Item.ItemCalc.INC_VALUE)
+                {
+                    gameData.speed += item.value;
+                }
+                else
+                {
+                    gameData.speed += gameData.speed * item.value;
+                }
+                break;
+            }
+
+            case Item.ItemType.GRENADE:
+            {
+                break;
+            }
+        }
+        // 아이템이 변경된 것을 실시간으로 반영하기 위해 이벤트를 발생시킴
+        OnItemChange();
+    }
+
+    // 인벤토리에서 아이템을 제거했을 때 데이터를 갱신하는 함수
+    public void RemoveItem(Item item)
+    {
+        // 아이템을 GameData.equipItem 배열에서 삭제
+        gameData.equipItem.Remove(item);
+
+        // 아이템 종류에 따른 분기 처리
+        switch(item.itemType)
+        {
+            case Item.ItemType.HP:
+            {
+                // 아이템의 계산 방식에 따라 연산 처리
+                if(item.itemCalc == Item.ItemCalc.INC_VALUE)
+                {
+                    gameData.hp -= item.value;
+                }
+                else
+                {
+                    gameData.hp = gameData.hp / (1.0f + item.value);
+                }
+                break;
+            }
+
+            case Item.ItemType.DAMAGE:
+            {
+                if(item.itemCalc == Item.ItemCalc.INC_VALUE)
+                {
+                    gameData.damage -= item.value;
+                }
+                else
+                {
+                    gameData.damage = gameData.damage / (1.0f + item.value);
+                }
+                break;
+            }
+
+            case Item.ItemType.SPEED:
+            {
+                if(item.itemCalc == Item.ItemCalc.INC_VALUE)
+                {
+                    gameData.speed -= item.value;
+                }
+                else
+                {
+                    gameData.speed = gameData.speed / (1.0f + item.value);
+                }
+                break;
+            }
+
+            case Item.ItemType.GRENADE:
+            {
+                break;
+            }
+        }
+        // 아이템이 변경된 것을 실시간으로 반영하기 위해 이벤트 발생
+        OnItemChange();
     }
 
     // Start is called before the first frame update
@@ -146,6 +270,7 @@ public class GameManager : MonoBehaviour
     {
         // 총알을 생성해 차일드화할 페어런트 게임 오브젝트를 생성
         GameObject objectPools = new GameObject("ObjectPools");
+
         // 풀링 개수만큼 총알 생성
         for(int i = 0; i < maxPool; i++)
         {

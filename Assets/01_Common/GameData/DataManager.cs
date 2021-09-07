@@ -10,10 +10,11 @@ using DataInfomation;
 
 public class DataManager : MonoBehaviour
 {
+    // 파일이 저장될 물리적인 경로 및 파일명을 저장할 변수
     public string dataPath;
 
     // 파일 경로와 파일명 지정
-    public void Initiailze()
+    public void Initialize()
     {
         dataPath = Application.persistentDataPath + "/gameData.dat";
     }
@@ -21,7 +22,7 @@ public class DataManager : MonoBehaviour
     // 데이터 저장 및 파일을 생성하는 함수
     public void Save(GameData gameData)
     {
-        // 바이너리 파일 포멧을 위한 BinaryFormatter 생성
+        // 바이너리 파일 포맷을 위한 BinaryFormatter 생성
         BinaryFormatter binaryFomat = new BinaryFormatter();
 
         // 데이터 저장을 위한 파일 생성

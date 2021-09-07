@@ -24,6 +24,18 @@ public class Damage : MonoBehaviour
     private readonly Color initColor = new Vector4(0, 1.0f, 0.0f, 1.0f);
     private Color currentColor;
 
+
+    private void OnEnable()
+    {
+        GameManager.OnItemChange += UpdateSetup;
+    }
+
+    private void UpdateSetup()
+    {
+        inializeHp = GameManager.instance.gameData.hp;
+        currentHp += GameManager.instance.gameData.hp - currentHp;
+    }
+
     // Start is called before the first frame update
     private void Start()
     {

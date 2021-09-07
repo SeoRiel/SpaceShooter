@@ -32,6 +32,12 @@ public class BulletCtrl : MonoBehaviour
     private void OnEnable()
     {
         rb.AddForce(transform.forward * speed);
+        GameManager.OnItemChange += UpdateSetup;
+    }
+
+    private void UpdateSetup()
+    {
+        damage = GameManager.instance.gameData.damage;
     }
 
     private void OnDisable()

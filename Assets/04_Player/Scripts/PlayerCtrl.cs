@@ -29,6 +29,16 @@ public class PlayerCtrl : MonoBehaviour
     [HideInInspector]
     public Animation animation;                          // Animation Component를 저장하기 위한 변수
 
+    private void OnEnable()
+    {
+        GameManager.OnItemChange += UpdateSetup;
+    }
+
+    private void UpdateSetup()
+    {
+        moveSpeed = GameManager.instance.gameData.speed;
+    }
+
     private void Start()                                 // Start is called before the first frame update
     {
         playerTransform = GetComponent<Transform>();     // 스크립트가 실행된 후,
