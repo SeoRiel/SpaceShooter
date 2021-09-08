@@ -41,6 +41,15 @@ public class FireCtrl : MonoBehaviour
     private AudioSource audio;                             // AudioSource Component를 저장할 변수
     private ShakeCamera shake;                             // Shake Class를 저장할 변수
 
+    // Raycast
+    public float fireRate = 0.1f;                           // 총알의 발사 간격
+
+    private int enemyLayer;                                 // 적 캐릭터의 레이어값을 저장할 변수
+    private bool isFire = false;                            // 자동 발사 여부를 판단할 함수
+    private float nextFire;                                 // 다음 발사 시간을 저장할 변수
+    private int obstacleLayer;                              // 장애물 레이어값을 저장할 변수
+    private int layerMask;                                  // 레이어 마스크의 비트 연산을 위한 변수
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -52,14 +61,57 @@ public class FireCtrl : MonoBehaviour
 
         // shake Scrpit 추출
         shake = GameObject.Find("CameraRig").GetComponent<ShakeCamera>();
+
+        // 적 캐릭터의 레이어 값을 추출
+        enemyLayer = LayerMask.NameToLayer("ENEMY");
+
+        // 장애물의 레이어 값을 추출
+        obstacleLayer = LayerMask.NameToLayer("OBSTACLE");
+
+        // 레이어 마스크의 비트 연산 (OR 연산)
+        layerMask = 1 << obstacleLayer | 1 << enemyLayer;
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if(EventSystem.current.IsPointerOverGameObject())
+        Debug.DrawRay(firePosition.position, firePosition.forward * 20.0f, Color.green);
+
+        if (EventSystem.current.IsPointerOverGameObject())
         {
             return;
+        }
+
+        // 레이 캐스트에 검출된 객체의 정보를 저장할 변수
+        RaycastHit hit;
+
+        // 레이캐스트를 생성해 적 캐릭터를 검출
+        // Physics.Raycast(원점 좌표, 발사 방향, out 반환 받을 변수, 도달 거리, 검출할 레이어)
+        if (Physics.Raycast(firePosition.position, firePosition.forward, out hit, 20.0f, 1 << enemyLayer))
+        {
+            isFire = (hit.collider.CompareTag("ENEMY"));
+        }
+        else
+        {
+            isFire = false;
+        }
+
+        if(!isReloading && isFire)
+        {
+            if(Time.time > nextFire)
+            {
+                // 총알 수 하나 감소
+                --remainingBullet;
+                Fire();
+
+                // 남은 총알이 없을 경우 재장전 코루틴 호출
+                if(remainingBullet == 0)
+                {
+                    StartCoroutine(Reloading());
+                }
+                // 다음 총알 발사 시간을 계산
+                nextFire = Time.time + fireRate;
+            }
         }
 
         // 마우스 왼쪽 버튼을 클릭했을 때, Fire 함수 호출
@@ -75,6 +127,8 @@ public class FireCtrl : MonoBehaviour
                 StartCoroutine(Reloading());
             }
         }
+
+
     }
 
     private void Fire()
