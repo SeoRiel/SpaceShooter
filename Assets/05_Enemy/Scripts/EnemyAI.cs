@@ -27,6 +27,7 @@ public class EnemyAI : MonoBehaviour
 
     private MoveAgent moveAgent;        // 이동을 제어하는 MoveAgnet class를 저장할 변수
     private EnemyFire enemyFire;        // 총알 발사를 제어하는 EnemyFire class를 저장할 변수
+    private EnemyFOV enemyFOV;          // 시야각 및 추적 반경을 제어하는 EnemyFOV class를 저장할 변수
 
     // 애니메이터 컨트롤러에 정의한 파라미터의 해시값을 미리 추출
     private readonly int hashMove = Animator.StringToHash("IsMove");
@@ -36,6 +37,7 @@ public class EnemyAI : MonoBehaviour
     private readonly int hashOffset = Animator.StringToHash("Offest");
     private readonly int hashWalkSpeed = Animator.StringToHash("WalkSpeed");
     private readonly int hashPlayerDie = Animator.StringToHash("PlayerDie");
+
 
     private void Awake()
     {
@@ -60,6 +62,9 @@ public class EnemyAI : MonoBehaviour
 
         // 총알 발사를 제어하는 EnemyFire class 추출
         enemyFire = GetComponent<EnemyFire>();
+
+        // 시야각 및 추적 반경을 제어하는 EnemyFOV class를 추출
+        enemyFOV = GetComponent<EnemyFOV>();
 
         // 코루틴의 지연 시간 생성
         wForS = new WaitForSeconds(0.3f);
@@ -90,6 +95,9 @@ public class EnemyAI : MonoBehaviour
     // 적 캐릭터의 상태를 검사하는 Coroutine Function
     private IEnumerator CheckState()
     {
+        // Object Pool에 생성 시, 다른 script의 Initialize를 위해 대기
+        yield return new WaitForSeconds(1.0f);
+
         // 적 캐릭터가 사망하기 전까지 도는 무한루프
         while(!isDie)
         {
@@ -106,7 +114,18 @@ public class EnemyAI : MonoBehaviour
             // 공격 사정거리 이내인 경우
             if(distance <= attackDistance)
             {
-                state = State.ATTACK;
+                // Player Character와의 거리에 장애물 여부 판단
+                if(enemyFOV.isViewPlayer())
+                {
+                    // 장애물이 없으면 공격
+                    state = State.ATTACK;
+                }
+                else
+                {
+                    // 장애물이 있으면 추적
+                    state = State.TRACE;
+                }
+                
             }
             // 추적 사정거리 이내인 경우
             else if( distance <= traceDistance)
