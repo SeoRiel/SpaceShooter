@@ -49,3 +49,6 @@ public class ShakeCamera : MonoBehaviour
         shakeCamera.localRotation = originRotation;
     }
 }
+
+
+
